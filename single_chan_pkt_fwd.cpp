@@ -506,11 +506,13 @@ void SendStat()
 
   string json = sb.GetString();
   //printf("stat update: %s\n", json.c_str());
-  printf("stat update: %s", stat_timestamp);
   if (cp_nb_rx_ok_tot==0) {
-    printf(" no packet received yet\n");
+    //printf(" no packet received yet\n");
+   fprintf(stderr, ".");
   } else {
-    printf(" %u packet%sreceived\n", cp_nb_rx_ok_tot, cp_nb_rx_ok_tot>1?"s ":" ");
+    //printf("stat update: %s", stat_timestamp);
+    //printf(" %u packet%sreceived\n", cp_nb_rx_ok_tot, cp_nb_rx_ok_tot>1?"s ":" ");
+    fprintf(stderr, ".");
   }
 
   // Build and send message.
@@ -543,7 +545,7 @@ bool Receivepacket()
 
       rssicorr = sx1272 ? 139 : 157;
 
-      printf("Packet RSSI: %d, ", ReadRegister(0x1A) - rssicorr);
+      printf("\nPacket RSSI: %d, ", ReadRegister(0x1A) - rssicorr);
       printf("RSSI: %d, ", ReadRegister(0x1B) - rssicorr);
       printf("SNR: %li, ", SNR);
       printf("Length: %hhu Message:'", length);
@@ -688,7 +690,8 @@ int main()
   si_other.sin_family = AF_INET;
 
   ifr.ifr_addr.sa_family = AF_INET;
-  strncpy(ifr.ifr_name, "eth0", IFNAMSIZ-1);  // can we rely on eth0?
+  //strncpy(ifr.ifr_name, "eth0", IFNAMSIZ-1);  // can we rely on eth0?
+  strncpy(ifr.ifr_name, "wlan0", IFNAMSIZ-1);
   ioctl(s, SIOCGIFHWADDR, &ifr);
 
   // ID based on MAC Adddress of eth0
